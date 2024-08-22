@@ -6,27 +6,24 @@ function mostrarMensaje(mensaje) {
     alert(mensaje);
 }
 
-function cambiarFormularios() {
-    if (document.getElementById('login')) {
-        document.getElementById('login').classList.toggle('hidden');
-        document.getElementById('register').classList.toggle('hidden');
-    }
-}
-
 function registrarUsuario(nombreUsuario, contraseña) {
+    let usuarios = JSON.parse(sessionStorage.getItem('usuarios')) || []; // Recuperar usuarios almacenados
     if (usuarios.find(usuario => usuario.nombreUsuario === nombreUsuario)) {
         mostrarMensaje('El nombre de usuario ya existe');
     } else {
         usuarios.push({ nombreUsuario, contraseña });
+        sessionStorage.setItem('usuarios', JSON.stringify(usuarios)); // Almacenar usuarios actualizados
         mostrarMensaje('Registro exitoso');
         window.location.href = '/login.html';
     }
 }
 
 function iniciarSesion(nombreUsuario, contraseña) {
+    let usuarios = JSON.parse(sessionStorage.getItem('usuarios')) || []; // Recuperar usuarios almacenados
     const usuario = usuarios.find(usuario => usuario.nombreUsuario === nombreUsuario && usuario.contraseña === contraseña);
     if (usuario) {
-        usuarioActual = nombreUsuario;
+        usuarioActual = usuario;
+        sessionStorage.setItem('usuarioActual', JSON.stringify(usuario)); // Almacenar el usuario actual
         mostrarMensaje('Inicio de sesión exitoso');
         window.location.href = '/cuenta.html';
     } else {
@@ -54,7 +51,7 @@ function depositarFondos(monto) {
 
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('registerButton')) {
-        document.getElementById('registerButton').on('click', () => {
+        document.getElementById('registerButton').addEventListener('click', () => {
             const nombreUsuario = document.getElementById('registerUsername').value;
             const contraseña = document.getElementById('registerPassword').value;
             if (nombreUsuario && contraseña) {
@@ -66,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (document.getElementById('loginButton')) {
-        document.getElementById('loginButton').on('click', () => {
+        document.getElementById('loginButton').addEventListener('click', () => {
             const nombreUsuario = document.getElementById('loginUsername').value;
             const contraseña = document.getElementById('loginPassword').value;
             if (nombreUsuario && contraseña) {
@@ -78,11 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (document.getElementById('checkBalance')) {
-        document.getElementById('checkBalance').on('click', verificarSaldo);
+        document.getElementById('checkBalance').addEventListener('click', verificarSaldo);
     }
 
     if (document.getElementById('transferFunds')) {
-        document.getElementById('transferFunds').on('click', () => {
+        document.getElementById('transferFunds').addEventListener('click', () => {
             let montoTransferir = parseFloat(prompt('Ingrese el monto a transferir'));
             if (isNaN(montoTransferir) || montoTransferir <= 0) {
                 mostrarMensaje('Monto inválido');
@@ -93,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (document.getElementById('depositFunds')) {
-        document.getElementById('depositFunds').on('click', () => {
+        document.getElementById('depositFunds').addEventListener('click', () => {
             let montoDepositar = parseFloat(prompt('Ingrese el monto a depositar'));
             if (isNaN(montoDepositar) || montoDepositar <= 0) {
                 mostrarMensaje('Monto inválido');
@@ -103,3 +100,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
