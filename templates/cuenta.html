@@ -15,15 +15,14 @@
                 <ul>
                     <li><a href="#">Inicio</a></li>
                     <li><a href="#">Perfil</a></li>
-                    <li><a href="#">Salir</a></li>
+                    <li><a href="#" id="logoutButton">Salir</a></li>
                 </ul>
             </nav>
         </header>
         <main class="main-content">
             <aside class="sidebar">
                 <ul>
-                    <li><a href="#">Resumen</a></li>
-                    <li><a href="#">Movimientos</a></li>
+                    <li><a href="/templates/resumen.html">Resumen</a></li>
                 </ul>
             </aside>
             <section class="content">
@@ -50,7 +49,6 @@
                             </tr>
                         </thead>
                         <tbody id="transactionTable">
-                            <!-- Las transacciones se cargarán aquí -->
                         </tbody>
                     </table>
                 </div>
@@ -64,8 +62,6 @@
             <p>&copy; 2023 Banco XYZ. Todos los derechos reservados.</p>
         </footer>
     </div>
-
-    <!-- Modal para Transferir Fondos -->
     <div id="transferModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeTransferModal">&times;</span>
@@ -77,8 +73,6 @@
             </form>
         </div>
     </div>
-
-    <!-- Modal para Depositar Fondos -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeDepositModal">&times;</span>

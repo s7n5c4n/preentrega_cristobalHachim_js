@@ -1,8 +1,5 @@
-let cuenta = 0;
 let usuarioActual = JSON.parse(localStorage.getItem('usuarioActual')) || null;
-let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
 
-// Function to show inline messages
 function mostrarMensaje(mensaje, tipo = 'info') {
     const messageBox = document.getElementById('messageBox');
     if (messageBox) {
@@ -13,51 +10,56 @@ function mostrarMensaje(mensaje, tipo = 'info') {
     }
 }
 
-// Function to update the balance display
 function actualizarSaldo() {
-    document.getElementById('currentBalance').textContent = cuenta.toFixed(2);
+    if (usuarioActual) {
+        document.getElementById('currentBalance').textContent = usuarioActual.balance.toFixed(2);
+    }
 }
 
-// Function to update the last transaction display
 function actualizarUltimaTransaccion() {
-    const ultimaTransaccion = transacciones[transacciones.length - 1];
-    if (ultimaTransaccion) {
+    if (usuarioActual && usuarioActual.transacciones.length > 0) {
+        const ultimaTransaccion = usuarioActual.transacciones[usuarioActual.transacciones.length - 1];
         document.getElementById('lastTransaction').textContent = `${ultimaTransaccion.tipo}: $${ultimaTransaccion.monto.toFixed(2)}`;
     } else {
         document.getElementById('lastTransaction').textContent = 'N/A';
     }
 }
 
-// Function to update the transaction history table
 function actualizarHistorialTransacciones() {
     const transactionTable = document.getElementById('transactionTable');
     transactionTable.innerHTML = '';
-    transacciones.forEach(transaccion => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${transaccion.fecha}</td>
-            <td>${transaccion.tipo}</td>
-            <td>${transaccion.monto.toFixed(2)}</td>
-            <td>${transaccion.saldo.toFixed(2)}</td>
-        `;
-        transactionTable.appendChild(row);
-    });
+    if (usuarioActual) {
+        usuarioActual.transacciones.forEach(transaccion => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${transaccion.fecha}</td>
+                <td>${transaccion.tipo}</td>
+                <td>${transaccion.monto.toFixed(2)}</td>
+                <td>${transaccion.saldo.toFixed(2)}</td>
+            `;
+            transactionTable.appendChild(row);
+        });
+    }
 }
 
-// Function to register a new user
 async function registrarUsuario(nombreUsuario, contraseña) {
     let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
     if (usuarios.find(usuario => usuario.nombreUsuario === nombreUsuario)) {
         mostrarMensaje('El nombre de usuario ya existe', 'error');
     } else {
-        usuarios.push({ nombreUsuario, contraseña });
+        const nuevoUsuario = {
+            nombreUsuario,
+            contraseña,
+            balance: 0,
+            transacciones: []
+        };
+        usuarios.push(nuevoUsuario);
         localStorage.setItem('usuarios', JSON.stringify(usuarios));
         mostrarMensaje('Registro exitoso', 'success');
         setTimeout(() => window.location.href = '/templates/login.html', 2000);
     }
 }
 
-// Function to log in a user
 async function iniciarSesion(nombreUsuario, contraseña) {
     let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
     const usuario = usuarios.find(usuario => usuario.nombreUsuario === nombreUsuario && usuario.contraseña === contraseña);
@@ -71,56 +73,69 @@ async function iniciarSesion(nombreUsuario, contraseña) {
     }
 }
 
-// Function to check balance
 function verificarSaldo() {
-    mostrarMensaje(`Tu saldo es: ${cuenta}`, 'info');
+    if (usuarioActual) {
+        mostrarMensaje(`Tu saldo es: ${usuarioActual.balance}`, 'info');
+    }
 }
 
-// Function to transfer funds
 function transferirFondos(monto) {
-    if (monto > cuenta) {
-        mostrarMensaje('Fondos insuficientes', 'error');
-    } else {
-        cuenta -= monto;
+    if (usuarioActual) {
+        if (monto > usuarioActual.balance) {
+            mostrarMensaje('Fondos insuficientes', 'error');
+        } else {
+            usuarioActual.balance -= monto;
+            const transaccion = {
+                fecha: new Date().toLocaleString(),
+                tipo: 'Transferencia',
+                monto: -monto,
+                saldo: usuarioActual.balance
+            };
+            usuarioActual.transacciones.push(transaccion);
+            actualizarDatosUsuarioActual();
+            mostrarMensaje(`Tu nuevo saldo es: ${usuarioActual.balance}`, 'success');
+            actualizarSaldo();
+            actualizarUltimaTransaccion();
+            actualizarHistorialTransacciones();
+        }
+    }
+}
+
+function depositarFondos(monto) {
+    if (usuarioActual) {
+        usuarioActual.balance += monto;
         const transaccion = {
             fecha: new Date().toLocaleString(),
-            tipo: 'Transferencia',
-            monto: -monto,
-            saldo: cuenta
+            tipo: 'Depósito',
+            monto: monto,
+            saldo: usuarioActual.balance
         };
-        transacciones.push(transaccion);
-        localStorage.setItem('transacciones', JSON.stringify(transacciones));
-        mostrarMensaje(`Tu nuevo saldo es: ${cuenta}`, 'success');
-        updateBalanceChart(cuenta);
-        updateTransactionChart(-monto);
+        usuarioActual.transacciones.push(transaccion);
+        actualizarDatosUsuarioActual();
+        mostrarMensaje(`Tu nuevo saldo es: ${usuarioActual.balance}`, 'success');
         actualizarSaldo();
         actualizarUltimaTransaccion();
         actualizarHistorialTransacciones();
     }
 }
 
-// Function to deposit funds
-function depositarFondos(monto) {
-    cuenta += monto;
-    const transaccion = {
-        fecha: new Date().toLocaleString(),
-        tipo: 'Depósito',
-        monto: monto,
-        saldo: cuenta
-    };
-    transacciones.push(transaccion);
-    localStorage.setItem('transacciones', JSON.stringify(transacciones));
-    mostrarMensaje(`Tu nuevo saldo es: ${cuenta}`, 'success');
-    updateBalanceChart(cuenta);
-    updateTransactionChart(monto);
-    actualizarSaldo();
-    actualizarUltimaTransaccion();
-    actualizarHistorialTransacciones();
+function cerrarSesion() {
+    localStorage.removeItem('usuarioActual');
+    mostrarMensaje('Sesión cerrada exitosamente', 'success');
+    setTimeout(() => window.location.href = '/templates/login.html', 2000);
 }
 
-// Adding event listeners after DOM content is loaded
+function actualizarDatosUsuarioActual() {
+    let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+    const index = usuarios.findIndex(usuario => usuario.nombreUsuario === usuarioActual.nombreUsuario);
+    if (index !== -1) {
+        usuarios[index] = usuarioActual;
+        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+        localStorage.setItem('usuarioActual', JSON.stringify(usuarioActual));
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize balance and transaction history on page load
     actualizarSaldo();
     actualizarUltimaTransaccion();
     actualizarHistorialTransacciones();
@@ -184,4 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('depositModal').style.display = 'none';
         }
     });
+
+    document.getElementById('logoutButton')?.addEventListener('click', cerrarSesion);
 });

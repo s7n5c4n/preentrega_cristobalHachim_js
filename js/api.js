@@ -1,10 +1,8 @@
-// Añadir al inicio del archivo script.js
-const API_KEY ='414dcf52c6fda3c190d90dde'; // Reemplaza con tu clave API de ExchangeRate-API
+const API_KEY ='414dcf52c6fda3c190d90dde'; 
 const API_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/USD`;
 
 let exchangeRatesChart;
 
-// Function to fetch exchange rates
 async function obtenerTasasDeCambio() {
     try {
         const response = await fetch(API_URL);
@@ -19,7 +17,6 @@ async function obtenerTasasDeCambio() {
     }
 }
 
-// Function to update the exchange rates chart
 function actualizarGraficoTasasDeCambio(rates) {
     const labels = Object.keys(rates);
     const data = Object.values(rates);
@@ -50,7 +47,6 @@ function actualizarGraficoTasasDeCambio(rates) {
     });
 }
 
-// Llamar a la función obtenerTasasDeCambio cuando se cargue el DOM
 document.addEventListener('DOMContentLoaded', () => {
     obtenerTasasDeCambio();
 });
