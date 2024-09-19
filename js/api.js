@@ -48,4 +48,5 @@ function actualizarGraficoTasasDeCambio(rates) {
 }
 document.addEventListener('DOMContentLoaded', () => {
     obtenerTasasDeCambio();
+    // setInterval(obtenerTasasDeCambio, 60000);
 });

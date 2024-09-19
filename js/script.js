@@ -201,4 +201,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('logoutButton')?.addEventListener('click', cerrarSesion);
+    // document.getElementById('balanceChart')?.addEventListener('click', () => {
 });
