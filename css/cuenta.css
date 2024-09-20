@@ -6,48 +6,20 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-}
+}/* cuenta.css */
 
-.header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-}
-
-.nav ul li {
-    margin: 0 15px;
-}
-
-.nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 20px;
     padding: 20px;
 }
 
 .sidebar {
     background-color: #fff;
     padding: 20px;
-    margin: 20px 0;
-    width: 100%;
-    max-width: 200px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 .sidebar ul {
@@ -66,18 +38,20 @@ body {
 }
 
 .content {
+    display: grid;
+    grid-template-rows: auto auto auto auto;
+    gap: 20px;
+}
+
+.card {
     background-color: #fff;
     padding: 20px;
-    margin: 20px 0;
-    width: 100%;
-    max-width: 800px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 
-.form-container {
-    text-align: center;
-    margin-bottom: 20px;
+.card h3 {
+    margin-top: 0;
 }
 
 .form-container button {
@@ -95,27 +69,6 @@ body {
     background-color: #45a049;
 }
 
-.account-summary {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.account-summary h3 {
-    margin-top: 0;
-}
-
-.account-summary p {
-    font-size: 1.2em;
-}
-
-.transaction-history {
-    margin-top: 20px;
-}
-
-.transaction-history h3 {
-    margin-top: 0;
-}
-
 .transaction-history table {
     width: 100%;
     border-collapse: collapse;
@@ -131,72 +84,43 @@ body {
     background-color: #f2f2f2;
 }
 
-.footer {
-    background-color: #4CAF50;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos para los modales */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-    background-color: #fff;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 400px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* cuenta.css */
-
-/* ... otros estilos ... */
-
-.exchange-rates {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-.exchange-rates h3 {
-    margin-top: 0;
-}
-
 #exchangeRatesChart {
     max-width: 100%;
     height: auto;
+}
+
+.currency-conversion form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.currency-conversion input,
+.currency-conversion select {
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.currency-conversion button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.currency-conversion button:hover {
+    background-color: #45a049;
+}
+
+#conversionResult {
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #333;
 }

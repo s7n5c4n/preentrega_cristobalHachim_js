@@ -3,91 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuenta - Dashboard</title>
+    <title>Cuenta</title>
     <link rel="stylesheet" href="../css/cuenta.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="dashboard">
-        <header class="header">
-            <h1>Banco XYZ</h1>
-            <nav class="nav">
-                <ul>
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Perfil</a></li>
-                    <li><a href="#" id="logoutButton">Salir</a></li>
-                </ul>
-            </nav>
-        </header>
-        <main class="main-content">
-            <aside class="sidebar">
-                <ul>
-                    <li><a href="/templates/resumen.html">Resumen</a></li>
-                    <li><a href="/templates/cuenta.html">Cuenta</a></li>
-                </ul>
-            </aside>
-            <section class="content">
-                <div class="form-container">
-                    <h2>Cuenta</h2>
-                    <button type="button" id="checkBalance">Monto en tu Cuenta</button>
-                    <button type="button" id="openTransferModal">Transferir</button>
-                    <button type="button" id="openDepositModal">Depositar</button>
+    <div class="container">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="#">Perfil</a></li>
+                <li><a href="#">Configuración</a></li>
+                <li><a href="#" id="logoutButton">Cerrar Sesión</a></li>
+            </ul>
+        </aside>
+        <section class="content">
+            <div class="card form-container">
+                <h2>Cuenta</h2>
+                <button type="button" id="checkBalance">Monto en tu Cuenta</button>
+                <button type="button" id="openTransferModal">Transferir</button>
+                <button type="button" id="openDepositModal">Depositar</button>
+                <div class="card" id="transferModal" style="display: none;">
+                    <h3>Transferir Fondos</h3>
+                    <form id="transferForm">
+                        <input type="number" id="transferAmount" placeholder="Monto a Transferir" required>
+                        <button type="submit">Transferir</button>
+                    </form>
                 </div>
-                <div class="account-summary">
-                    <h3>Resumen de Cuenta</h3>
-                    <p>Saldo Actual: $<span id="currentBalance">0.00</span></p>
-                    <p>Última Transacción: <span id="lastTransaction">N/A</span></p>
+                
+                <div class="card" id="depositModal" style="display: none;">
+                    <h3>Depositar Fondos</h3>
+                    <form id="depositForm">
+                        <input type="number" id="depositAmount" placeholder="Monto a Depositar" required>
+                        <button type="submit">Depositar</button>
+                    </form>
                 </div>
-                <div class="transaction-history">
-                    <h3>Historial de Transacciones</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Descripción</th>
-                                <th>Monto</th>
-                                <th>Saldo</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transactionTable">
-                        </tbody>
-                    </table>
-                </div>
-                <div class="exchange-rates">
-                    <h3>Tasas de Cambio</h3>
-                    <canvas id="exchangeRatesChart" width="400" height="200"></canvas>
-                </div>
-            </section>
-        </main>
-        <footer class="footer">
-            <p>&copy; 2023 Banco XYZ. Todos los derechos reservados.</p>
-        </footer>
+            </div>
+            <div class="card account-summary">
+                <h3>Resumen de Cuenta</h3>
+                <p>Saldo Actual: $<span id="currentBalance">0.00</span></p>
+                <p>Última Transacción: <span id="lastTransaction">N/A</span></p>
+            </div>
+            <div class="card transaction-history">
+                <h3>Historial de Transacciones</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTable">
+                    </tbody>
+                </table>
+            </div>
+            <div class="card exchange-rates">
+                <h3>Tasas de Cambio</h3>
+                <canvas id="exchangeRatesChart"></canvas>
+            </div>
+            <div class="card currency-conversion">
+                <h3>Conversión de Divisas</h3>
+                <form id="conversionForm">
+                    <input type="number" id="amountToConvert" placeholder="Monto" required>
+                    <select id="currencyToConvertTo">
+                        <!-- Opciones de divisas se llenarán dinámicamente -->
+                    </select>
+                    <button type="button" id="convertButton">Convertir</button>
+                </form>
+                <p id="conversionResult"></p>
+            </div>
+        </section>
     </div>
-    <div id="transferModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeTransferModal">&times;</span>
-            <h2>Transferir Fondos</h2>
-            <form id="transferForm">
-                <label for="transferAmount">Monto a Transferir:</label>
-                <input type="number" id="transferAmount" required>
-                <button type="submit">Transferir</button>
-            </form>
-        </div>
-    </div>
-    <div id="depositModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeDepositModal">&times;</span>
-            <h2>Depositar Fondos</h2>
-            <form id="depositForm">
-                <label for="depositAmount">Monto a Depositar:</label>
-                <input type="number" id="depositAmount" required>
-                <button type="submit">Depositar</button>
-            </form>
-        </div>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../js/script.js"></script>
-    <script src="../js/chartbar.js"></script>
     <script src="../js/api.js"></script>
 </body>
 </html>
